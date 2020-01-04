@@ -1,7 +1,7 @@
 library(shiny); library(dplyr); library(ggplot2); library(tidycensus)
 library(sf); library(leaflet); library(tigris); library(scales); library(shinyalert)
 
-# setwd('C:/Users/Tyler/Documents/censusPortal')
+# setwd('C:/Users/Tyler/Documents/censusPortal/censusPortal')
 
 # census_api_key("")
 
@@ -16,6 +16,7 @@ zips <- st_read('./Zipcodes_Poly.shp')
 colnames(zips)[colnames(zips) == 'CODE'] <- 'GEOID'
 phl <- st_read('./city_limits.shp')
 phl <- st_transform(phl, '+proj=longlat +datum=WGS84')
+
 
 ageTables <- c('B01001_003', 'B01001_004', 'B01001_027', 'B01001_028', 
                'B01001_005', 'B01001_006', 'B01001_029', 'B01001_030',
@@ -453,7 +454,7 @@ server <- function(input, output) {
         leaflet() %>%
             addProviderTiles(providers$Stamen.TonerLite) %>%
             setView(lng=-75.137349 , lat = 39.978797, zoom = 10) %>% # Approximate center of city
-            addPolygons(data = zips, fillOpacity = 0.4, fillColor = 'gray', weight = 1.5) %>%
+            addPolygons(data = zips, fillOpacity = 0.4, fillColor = 'gray', weight = 1.5, popup = zips$GEOID) %>%
             addPolygons(data = selectedZips, fillOpacity = 0.4, fillColor = 'red', weight = 1.5)
     })
     

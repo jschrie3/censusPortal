@@ -460,8 +460,9 @@ server <- function(input, output) {
     
     output$neighborhoodMap <- renderLeaflet({
         zoomNeighborhood <- 11
+        centroidNeighborhood <- c(-75.137349, 39.978797)
         selectedNeighborhood <- azaveaNeighborhoods %>%
-            filter(MAPNAME %in% req(input$neighborhoodInput))
+            filter(MAPNAME %in% input$neighborhoodInput) # had previously used req(input$neighborhoodInput) but that's not necessary with a previous assignment to centroidNeighborhood that can be rewritten
         if (nrow(selectedNeighborhood) == 1){
             centroidNeighborhood <- req(selectedNeighborhood) %>%
                 st_centroid() %>%
@@ -475,8 +476,9 @@ server <- function(input, output) {
         leaflet() %>%
             addProviderTiles(providers$Stamen.TonerLite) %>%
             setView(lng = centroidNeighborhood[1] , lat = centroidNeighborhood[2], zoom = zoomNeighborhood) %>%
-            addPolygons(data = azaveaNeighborhoods, fillOpacity = 0.4, fillColor = 'gray', weight = 1.5) %>%
-            addPolygons(data = selectedNeighborhood, fillOpacity = 0.4, fillColor = 'red', weight = 1.5)
+            addPolygons(data = azaveaNeighborhoods, fillOpacity = 0.4, fillColor = 'gray', weight = 1.5, popup = azaveaNeighborhoods$MAPNAME) %>%
+            addPolygons(data = selectedNeighborhood, fillOpacity = 0.4, fillColor = 'red', weight = 1.5) %>%
+            addControl('Neighborhoods defined by Azavea.', position = 'bottomleft')
     })
     
     output$radiusMap <- renderLeaflet({ # create a leaflet map that users can click on to choose a point for buffer center

@@ -16,6 +16,9 @@ zips <- st_read('./Zipcodes_Poly.shp')
 colnames(zips)[colnames(zips) == 'CODE'] <- 'GEOID'
 phl <- st_read('./city_limits.shp')
 phl <- st_transform(phl, '+proj=longlat +datum=WGS84')
+peerBG <- read.csv('./peerBlockGroups.csv')
+ucdBG <- as.character(peerBG$philadelphia[!is.na(peerBG$philadelphia)])
+
 
 
 ageTables <- c('B01001_003', 'B01001_004', 'B01001_027', 'B01001_028', 
@@ -737,6 +740,8 @@ server <- function(input, output) {
         } else if (input$defineGeography == 'By zip code'){
             zips[unlist(st_covers(chosenGeography(), zips)),]
             # censusZip[unlist(st_covers(chosenGeography(), censusZip)),]
+        } else if (input$defineGeography == 'University City District boundaries'){
+            blockGroups[blockGroups$GEOID %in% ucdBG,]
         } else {
             blockGroups[unlist(st_intersects(chosenGeography(), blockGroups)),]
         }

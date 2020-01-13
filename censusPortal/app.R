@@ -91,17 +91,17 @@ ui <- fluidPage(
     
     useShinyalert(),
     
-    titlePanel('University City Data Portal'),
+    titlePanel('Philadelphia ACS Portal'),
     
     fluidRow(
         column(width = 4,
-               em('To visualize and download data, select specifications below.'),
+               em('To visualize American Community Survey data for a chosen geographic area, set specifications below.'),
                hr(),
                
                radioButtons(
                    inputId = 'defineGeography',
                    label = 'Define your geographical area of interest:',
-                   choices = c('University City District boundaries', 'By zip code', 'By neighborhood',
+                   choices = c('By zip code', 'By neighborhood',
                                'Select a point with surrounding radius', 'Select Census block groups', 'Upload shapefile'),
                    selected = F
                ),
